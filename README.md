@@ -1,6 +1,6 @@
 # Postgres Docker Compose Setup
 
-This repository contains a Docker Compose configuration to set up a PostgreSQL database container using `postgres:latest` image. It provides an easy way to spin up a PostgreSQL instance for local development or testing purposes.
+This repository contains a Docker Compose configuration to set up a PostgreSQL database container using the `postgres:latest` image. It provides an easy way to spin up a PostgreSQL instance for local development or testing purposes.
 
 ## Getting Started
 
@@ -15,13 +15,18 @@ Before you begin, ensure you have the following installed on your system:
 
 1. Clone the repository to your local machine:
    ```bash
-   git https://github.com/black-spidera/postgres-docker.git
+   git clone https://github.com/black-spidera/postgres-docker.git
    cd postgres-docker
    ```
 
-2. To start the PostgreSQL service, run:
+2. To build and start the PostgreSQL service for the first time, run:
    ```bash
-   docker-compose up -d
+   docker compose -f docker-compose.yml up --build
+   ```
+
+   For subsequent runs, you can start the service with:
+   ```bash
+   docker compose -f docker-compose.yml up
    ```
 
    This command will:
@@ -32,12 +37,12 @@ Before you begin, ensure you have the following installed on your system:
 
 3. To stop and remove the containers and networks, run:
    ```bash
-   docker-compose down
+   docker compose down
    ```
 
    If you also want to remove the persistent volume (which will delete the database data), add the `-v` flag:
    ```bash
-   docker-compose down -v
+   docker compose down -v
    ```
 
 ### Configuration
@@ -67,6 +72,3 @@ docker exec -it postgres-container psql -U postgres
 
 The database data is stored in a named volume `postgres-data` to ensure persistence across container restarts.
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
