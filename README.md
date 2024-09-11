@@ -13,34 +13,42 @@ Before you begin, ensure you have the following installed on your system:
 
 ### Installation and Setup
 
-1. Clone the repository to your local machine:
+1. **Clone the repository** to your local machine:
    ```bash
    git clone https://github.com/black-spidera/postgres-docker.git
    cd postgres-docker
    ```
 
-2. To build and start the PostgreSQL service for the first time, run:
+2. **Build and start the PostgreSQL service for the first time** by running:
    ```bash
    docker compose -f docker-compose.yml up --build
    ```
 
-   For subsequent runs, you can start the service with:
-   ```bash
-   docker compose -f docker-compose.yml up
-   ```
+   - For subsequent runs, you can start the service with:
+     ```bash
+     docker compose -f docker-compose.yml up
+     ```
 
-   This command will:
-   - Download the `postgres:latest` Docker image if it is not already available.
-   - Start a new container named `postgres-container`.
-   - Expose PostgreSQL on port `5432` for local access.
-   - Persist the database data in a Docker volume named `postgres-data`.
+   - This will:
+     - Download the `postgres:latest` Docker image (if not already available).
+     - Start a container named `postgres-container`.
+     - Expose PostgreSQL on port `5432` for local access.
+     - Persist database data in a Docker volume named `postgres-data`.
 
-3. To stop and remove the containers and networks, run:
+3. **Access the PostgreSQL container**:
+   - To access the PostgreSQL shell in the running container:
+     ```bash
+     docker exec -it postgres-container psql -U postgres
+     ```
+   - This command opens the PostgreSQL prompt where you can manage your database.
+
+4. **Stop and remove containers**:
+   To stop and remove the running containers and networks:
    ```bash
    docker compose down
    ```
 
-   If you also want to remove the persistent volume (which will delete the database data), add the `-v` flag:
+   If you also want to remove the persistent volume (which will delete all database data), add the `-v` flag:
    ```bash
    docker compose down -v
    ```
@@ -52,23 +60,27 @@ Before you begin, ensure you have the following installed on your system:
 - **Password**: `postgres`
 - **Port**: `5432`
 
-You can modify the database name, username, and password in the `docker-compose.yml` file under the `environment` section if needed.
+You can modify these configurations in the `docker-compose.yml` file under the `environment` section.
 
 ### Accessing the Database
 
-You can access the running PostgreSQL container using any PostgreSQL client (e.g., `psql`, PgAdmin, DBeaver, etc.).
+You can connect to the running PostgreSQL container using a PostgreSQL client like `psql`, PgAdmin, DBeaver, or any other tool that supports PostgreSQL.
 
 Example connection string:
 ```
 postgresql://postgres:postgres@localhost:5432/medusajs
 ```
 
-Alternatively, you can run the following command to enter the container's shell:
+Alternatively, to directly access the database shell inside the container, run:
 ```bash
 docker exec -it postgres-container psql -U postgres
 ```
 
-### Volumes
+### Persistent Data
 
-The database data is stored in a named volume `postgres-data` to ensure persistence across container restarts.
+The database data is stored in a Docker volume named `postgres-data`. This ensures that the database persists across container restarts, and you won't lose your data unless the volume is explicitly removed.
+
+### Troubleshooting
+
+- **Port Binding Error**: If you get an error like `bind: address already in use`, it means another service is already using port `5432`. You can either stop that service or modify the `docker-compose.yml` to use a different port.
 
